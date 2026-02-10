@@ -1,0 +1,9 @@
+{
+  "latest_version": "1.0.1",
+  "latest_build": 76,
+  "min_supported_build": 0,
+  "android_apk_url": "https://swaply.cc/download/swaply-1.0.1.apk",
+  "ios_store_url": "https://apps.apple.com/app/idXXXXXXXXX",
+  "changelog": "Bugfix & polish.",
+  "force_update": false
+}

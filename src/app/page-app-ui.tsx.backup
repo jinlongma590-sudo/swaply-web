@@ -1,0 +1,293 @@
+// src/app/page.tsx
+"use client";
+
+import Link from "next/link";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import Image from "next/image";
+
+// 分类配置（与 App 完全一致）
+const CATEGORIES = [
+  { slug: "trending", label: "Trending", icon: "🔥", highlight: true },
+  { slug: "phones", label: "Phones", icon: "📱" },
+  { slug: "vehicles", label: "Vehicles", icon: "🚗" },
+  { slug: "property", label: "Property", icon: "🏢" },
+  { slug: "electronics", label: "Electronics", icon: "💻" },
+  { slug: "fashion", label: "Fashion", icon: "👗" },
+  { slug: "services", label: "Services", icon: "🔧" },
+  { slug: "jobs", label: "Jobs", icon: "💼" },
+  { slug: "jobs-seeking", label: "Jobs Seeking", icon: "🔍" },
+  { slug: "home-furniture", label: "Home & Furniture", icon: "🛋️" },
+  { slug: "beauty-care", label: "Beauty & Care", icon: "💄" },
+  { slug: "pets", label: "Pets", icon: "🐾" },
+  { slug: "baby-kids", label: "Baby & Kids", icon: "🧸" },
+  { slug: "repair", label: "Repair", icon: "🛠️" },
+  { slug: "leisure", label: "Leisure", icon: "🏃" },
+  { slug: "food-drinks", label: "Food & Drinks", icon: "🍔" },
+];
+
+type Listing = {
+  id: string;
+  title: string | null;
+  price: number | string | null;
+  city: string | null;
+  images?: string[] | null;
+  image_urls?: string[] | null;
+  created_at?: string | null;
+};
+
+function fmtPrice(v: number | string | null | undefined): string {
+  if (v == null || v === "") return "$0";
+  const n = typeof v === "string" ? Number(v) : v;
+  if (!isFinite(Number(n))) return String(v);
+  return new Intl.NumberFormat("en-ZW", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(Number(n));
+}
+
+function firstImage(item: Listing): string {
+  const arr = item.image_urls || item.images;
+  if (Array.isArray(arr) && arr[0]) return arr[0];
+  return "/og.png";
+}
+
+export default function HomePage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCity, setSelectedCity] = useState("All Zimbabwe");
+  const [trendingItems, setTrendingItems] = useState<Listing[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // 加载 Trending 商品（最新的 20 条）
+  useEffect(() => {
+    async function loadTrending() {
+      try {
+        const { data, error } = await supabase
+          .from("listings")
+          .select("id, title, price, city, images, image_urls, created_at")
+          .order("created_at", { ascending: false })
+          .limit(20);
+
+        if (!error && data) {
+          setTrendingItems(data as Listing[]);
+        }
+      } catch (err) {
+        console.error("Error loading trending:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadTrending();
+  }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      window.location.href = `/search?q=${encodeURIComponent(searchQuery.trim())}`;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 via-white to-brand-50">
+      {/* 顶部导航栏 */}
+      <header className="sticky top-0 z-50 bg-brand-600 shadow-lg">
+        <div className="mx-auto max-w-[1320px] px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 text-white hover:opacity-90 transition">
+            <div className="logo-square">S</div>
+            <span className="text-lg font-semibold">Swaply</span>
+          </Link>
+          <nav className="flex items-center gap-2">
+            <Link href="/browse" className="btn btn-ghost text-sm">
+              Open Web App
+            </Link>
+            <Link href="/download" className="btn btn-ghost text-sm">
+              Download
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* 主内容区域 */}
+      <main className="mx-auto max-w-[1320px] px-4 py-6">
+        {/* 搜索区域 */}
+        <section className="rounded-2xl bg-white border border-blue-100 p-6 shadow-sm">
+          <h2 className="text-2xl font-bold text-brand-600 mb-4">
+            What are you looking for?
+          </h2>
+          
+          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-3">
+            {/* 城市选择器 */}
+            <div className="flex-shrink-0 md:w-48">
+              <select
+                value={selectedCity}
+                onChange={(e) => setSelectedCity(e.target.value)}
+                className="w-full h-12 px-4 rounded-xl border border-blue-200 bg-white text-brand-800 font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
+              >
+                <option value="All Zimbabwe">All Zimbabwe</option>
+                <option value="Harare">Harare</option>
+                <option value="Bulawayo">Bulawayo</option>
+                <option value="Mutare">Mutare</option>
+                <option value="Gweru">Gweru</option>
+              </select>
+            </div>
+
+            {/* 搜索框 */}
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products..."
+                className="w-full h-12 pl-4 pr-12 rounded-xl border border-blue-200 bg-white text-brand-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-brand-600 text-white grid place-items-center hover:bg-brand-700 transition"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="m21 21-4.35-4.35" />
+                </svg>
+              </button>
+            </div>
+          </form>
+        </section>
+
+        {/* 分类网格 */}
+        <section className="mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-3">
+            {CATEGORIES.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={cat.slug === "trending" ? "/browse" : `/category/${cat.slug}`}
+                className={`
+                  group relative overflow-hidden rounded-2xl p-5 text-center
+                  transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
+                  ${
+                    cat.highlight
+                      ? "bg-gradient-to-br from-orange-400 to-orange-500 text-white shadow-md"
+                      : "bg-white border border-blue-100 text-brand-800 hover:border-brand-300"
+                  }
+                `}
+              >
+                <div className="text-4xl mb-2">{cat.icon}</div>
+                <div className="text-sm font-semibold">{cat.label}</div>
+                
+                {/* Hover 效果 */}
+                <div className={`
+                  absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity
+                  ${cat.highlight ? "bg-gradient-to-br from-orange-500 to-orange-600" : "bg-brand-50"}
+                `} style={{ zIndex: -1 }} />
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Trending 区域 */}
+        <section className="mt-10">
+          <div className="flex items-center gap-2 mb-4">
+            <h3 className="text-2xl font-extrabold text-brand-900">Trending</h3>
+            <span className="text-2xl">🔥</span>
+          </div>
+          <p className="text-brand-700 mb-5">Popular Items</p>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-brand-200 border-t-brand-600" />
+            </div>
+          ) : trendingItems.length > 0 ? (
+            <div className="relative">
+              {/* 横向滚动容器 */}
+              <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
+                {trendingItems.map((item) => (
+                  <Link
+                    key={item.id}
+                    href={`/l/${item.id}`}
+                    className="group flex-shrink-0 w-72 snap-start"
+                  >
+                    <div className="overflow-hidden rounded-2xl bg-white border border-blue-100 shadow-sm transition-all hover:shadow-lg hover:scale-[1.02]">
+                      {/* 商品图片 */}
+                      <div className="relative aspect-[4/3] w-full bg-neutral-100 overflow-hidden">
+                        <Image
+                          src={firstImage(item)}
+                          alt={item.title || "Product"}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-110"
+                          sizes="288px"
+                          unoptimized={firstImage(item).startsWith("http")}
+                        />
+                      </div>
+
+                      {/* 商品信息 */}
+                      <div className="p-4">
+                        <h4 className="font-semibold text-brand-900 truncate">
+                          {item.title || "Untitled"}
+                        </h4>
+                        <div className="mt-2 flex items-center justify-between">
+                          <span className="text-lg font-bold text-brand-600">
+                            {fmtPrice(item.price)}
+                          </span>
+                          {item.city && (
+                            <span className="text-xs text-neutral-500 flex items-center gap-1">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7m0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/>
+                              </svg>
+                              {item.city}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* 查看更多按钮 */}
+              <div className="mt-6 text-center">
+                <Link
+                  href="/browse"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-brand-600 text-white rounded-full font-semibold hover:bg-brand-700 transition shadow-md"
+                >
+                  View All Listings
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-20 text-neutral-500">
+              No trending items yet
+            </div>
+          )}
+        </section>
+
+        {/* 页脚 */}
+        <footer className="mt-16 pt-8 border-t border-blue-100">
+          <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-neutral-600">
+            <span>© {new Date().getFullYear()} Swaply. All rights reserved.</span>
+            <div className="flex flex-wrap items-center gap-4">
+              <Link href="/privacy" className="hover:text-brand-600 transition">Privacy</Link>
+              <Link href="/terms" className="hover:text-brand-600 transition">Terms</Link>
+              <Link href="/contact" className="hover:text-brand-600 transition">Contact</Link>
+              <Link href="/delete-account" className="hover:text-brand-600 transition">Delete Account</Link>
+            </div>
+          </div>
+        </footer>
+      </main>
+
+      {/* 隐藏原生滚动条的样式 */}
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </div>
+  );
+}

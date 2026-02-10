@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 页面背景的淡蓝渐变+气氛光 */
+html, body, #__next {
+  height: 100%;
+}
+body {
+  @apply bg-[#F5FAFF];
+  background-image:
+    radial-gradient(1200px 600px at 50% -150px, rgba(26,115,232,0.10), transparent 60%),
+    linear-gradient(to bottom, #F5FAFF 0%, #ffffff 60%);
+}
+
+/* 通用卡片 */
+.card {
+  @apply rounded-2xl bg-white border border-slate-200 shadow-card;
+}
+
+/* 圆角胶囊按钮 */
+.pill {
+  @apply h-11 px-6 inline-grid place-items-center rounded-full font-semibold text-[15px];
+}
+
+/* 首页下半区三张“手机”背景模糊的氛围 */
+.hero-phones {
+  position: relative;
+  isolation: isolate;
+}
+.hero-phones::before,
+.hero-phones::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+     radial-gradient(200px 500px at 20% 100%, rgba(26,115,232,0.12), transparent 70%),
+     radial-gradient(200px 500px at 50% 100%, rgba(26,115,232,0.12), transparent 70%),
+     radial-gradient(200px 500px at 80% 100%, rgba(26,115,232,0.12), transparent 70%);
+  filter: blur(0.5px);
+}
+
+/* Footer 链接 */
+.footer a { @apply text-slate-600 hover:text-slate-900 transition; }

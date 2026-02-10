@@ -1,0 +1,266 @@
+﻿"use client";
+
+import Link from "next/link";
+import { useEffect, useRef } from "react";
+
+export default function HomePage() {
+  const rowRef = useRef<HTMLDivElement | null>(null);
+
+  // 移动端初次进入，滚到中间那张卡片
+  useEffect(() => {
+    const isMobile =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 1100px)").matches;
+
+    if (!isMobile || !rowRef.current) return;
+    const el = rowRef.current;
+    const middle = el.children[1] as HTMLElement | undefined;
+    if (middle) {
+      const offset =
+        middle.offsetLeft - (el.clientWidth - middle.clientWidth) / 2;
+      el.scrollTo({ left: Math.max(offset, 0) });
+    }
+  }, []);
+
+  return (
+    <div className="min-h-screen">
+      {/* 顶部栏 */}
+      <header className="topbar">
+        <div className="nav-wrap">
+          <div className="flex items-center gap-2 text-white">
+            <div className="logo-square">S</div>
+            <span className="text-lg font-semibold">Swaply</span>
+          </div>
+          <nav className="flex items-center gap-2">
+            <Link href="/browse" className="btn btn-ghost">
+              Open Web App
+            </Link>
+            <Link href="/download" className="btn btn-ghost">
+              Download
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section className="hero-modern">
+        <div className="hero-inner">
+          {/* 放大：把容器从 max-w-7xl 换成 1320px，自适应更接近线上 */}
+          <div className="mx-auto max-w-[1320px] px-6 pt-12 pb-4 text-center">
+            {/* 放大：标题字号交给 CSS 的 .hero-title( clamp ) 控制 */}
+            <h1 className="hero-title font-extrabold tracking-tight">
+              Trade what you have for
+              <br className="hidden md:block" /> what you need
+            </h1>
+            <p className="mt-4 text-brand-800/80 max-w-3xl mx-auto">
+              Simple bartering made easy: post, match, and swap—fast and
+              friendly.
+            </p>
+
+            <div className="mt-7 flex items-center justify-center gap-3">
+              <Link href="/browse" className="btn btn-primary btn-lg">
+                Open Web App
+              </Link>
+              <Link href="/download" className="btn btn-primary btn-lg">
+                Download
+              </Link>
+            </div>
+          </div>
+
+          {/* 放大：容器也统一 1320px；卡片间距由 CSS 的 .phones-row 控制 */}
+          <div className="mx-auto max-w-[1320px] px-6 pb-16">
+            <div ref={rowRef} className="phones-row">
+              {/* 卡 1：Swaply */}
+              <article className="phone">
+                <div className="phone-screen">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="grid place-items-center text-brand-700 font-bold"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        borderRadius: 8,
+                        background: "#fff",
+                        boxShadow: "var(--shadow-soft)",
+                      }}
+                    >
+                      S
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-brand-900 leading-5">
+                        Swaply
+                      </h3>
+                      <div className="text-[11px] text-brand-800/60">
+                        Buy • Sell • Swap, locally
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {[
+                      { dot: "bg-blue-500", label: "Smart matching" },
+                      { dot: "bg-emerald-500", label: "Near you" },
+                      { dot: "bg-green-500", label: "Safe trade" },
+                    ].map((i) => (
+                      <div
+                        key={i.label}
+                        className="flex items-center justify-between rounded-full border border-blue-100 bg-white px-3 py-2 shadow-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className={`h-2 w-2 rounded-full ${i.dot}`} />
+                          <span className="text-sm text-brand-900">
+                            {i.label}
+                          </span>
+                        </div>
+                        <span className="h-1.5 w-28 rounded-full bg-blue-100" />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="phone-notch" />
+                </div>
+              </article>
+
+              {/* 卡 2：Browse */}
+              <article className="phone">
+                <div className="phone-screen">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="grid place-items-center text-brand-700 font-bold"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        borderRadius: 8,
+                        background: "#fff",
+                        boxShadow: "var(--shadow-soft)",
+                      }}
+                    >
+                      S
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-brand-900 leading-5">
+                        Browse
+                      </h3>
+                      <div className="text-[11px] text-brand-800/60">
+                        Find what you need quickly
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-3 gap-3">
+                    {[
+                      { title: "Vehicles", icon: "🚗" },
+                      { title: "Property", icon: "🏠" },
+                      { title: "Repair", icon: "🛠️" },
+                      { title: "Pets", icon: "🐾" },
+                      { title: "Fashion", icon: "👗" },
+                      { title: "Phones", icon: "📱" },
+                    ].map((i) => (
+                      <div
+                        key={i.title}
+                        className="rounded-xl border border-blue-100 bg-white px-3 py-3 text-center shadow-sm hover:shadow transition"
+                      >
+                        <div className="text-xl">{i.icon}</div>
+                        <div className="mt-1 text-xs text-brand-900">
+                          {i.title}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="phone-notch" />
+                </div>
+              </article>
+
+              {/* 卡 3：Profile */}
+              <article className="phone">
+                <div className="phone-screen">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="grid place-items-center text-brand-700 font-bold"
+                      style={{
+                        width: 22,
+                        height: 22,
+                        borderRadius: 8,
+                        background: "#fff",
+                        boxShadow: "var(--shadow-soft)",
+                      }}
+                    >
+                      S
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <h3 className="text-base font-semibold text-brand-900 leading-5">
+                          Your profile
+                        </h3>
+                        <div className="text-[11px] text-brand-800/60">
+                          Rewards & activities
+                        </div>
+                      </div>
+                      <span className="ml-1 rounded-full bg-green-100 text-green-700 px-2 py-0.5 text-[10px] font-medium">
+                        Verified
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {[
+                      { icon: "📦", label: "My Listings", count: "12" },
+                      { icon: "💖", label: "Wishlist", count: "5" },
+                      { icon: "🎟️", label: "Coupons", count: "2" },
+                    ].map((i) => (
+                      <div
+                        key={i.label}
+                        className="flex items-center justify-between rounded-xl border border-blue-100 bg-white px-3 py-2 shadow-sm"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span>{i.icon}</span>
+                          <span className="text-sm text-brand-900">
+                            {i.label}
+                          </span>
+                        </div>
+                        <span className="rounded-full bg-blue-50 text-blue-700 px-2 py-0.5 text-xs">
+                          {i.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="phone-notch" />
+                </div>
+              </article>
+            </div>
+
+            {/* 手机端的滑动提示 */}
+            <div className="swipe-hint">
+              <span className="arrow">←</span>
+              <span>Swipe</span>
+              <span className="arrow right">→</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 页脚 */}
+      <footer className="border-t border-blue-100">
+        <div className="mx-auto max-w-[1320px] px-6 h-16 flex items-center justify-between text-sm text-brand-800/70">
+          <span>© {new Date().getFullYear()} Swaply</span>
+          <div className="flex items-center gap-4">
+            <a href="/privacy" className="hover:text-brand-900">
+              Privacy
+            </a>
+            <a href="/terms" className="hover:text-brand-900">
+              Terms
+            </a>
+            <a href="/delete-account" className="hover:text-brand-900">
+              Delete Account
+            </a>
+            <a href="/contact" className="hover:text-brand-900">
+              Contact
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

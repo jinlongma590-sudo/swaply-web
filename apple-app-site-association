@@ -1,0 +1,24 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "KKMFJVK8MV.cc.swaply.app",
+        "paths": [
+          "/l/*",
+          "/listing",
+          "/listing/*",
+          "/offer",
+          "/offer/*",
+          "/reset-password",
+          "/auth/callback"
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "KKMFJVK8MV.cc.swaply.app"
+    ]
+  }
+}

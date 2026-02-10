@@ -1,0 +1,325 @@
+﻿@import "tailwindcss";
+
+/* 主题令牌 */
+@theme {
+  --color-brand-50:  #eef7ff;
+  --color-brand-100: #d9edff;
+  --color-brand-200: #b9dcff;
+  --color-brand-300: #8ec6ff;
+  --color-brand-400: #5ea9ff;
+  --color-brand-500: #3a8bff;
+  --color-brand-600: #2d6fe6;
+  --color-brand-700: #1e57b9;
+  --color-brand-800: #19499a;
+  --color-brand-900: #173e82;
+
+  --shadow-soft: 0 28px 80px rgba(23,62,130,.12);
+  --brand-200-40: #b9dcff66;
+}
+
+html, body { height: 100%; }
+body { @apply bg-brand-50 text-gray-900 antialiased; }
+a { text-underline-offset: 3px; }
+::selection { background: var(--color-brand-200); color: var(--color-brand-900); }
+
+/* 🚀 现代科技感顶部栏 */
+.topbar { 
+  @apply sticky top-0 z-50 text-white;
+  background: linear-gradient(135deg, #2d6fe6 0%, #1e57b9 100%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 4px 20px rgba(45, 111, 230, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.topbar .nav-wrap { @apply max-w-[1320px] mx-auto px-6 h-14 flex items-center justify-between; }
+.topbar .logo-square{
+  width: 32px; height: 32px; border-radius: 10px;
+  display: grid; place-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-brand-700);
+  font-weight: 700;
+  font-size: 16px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  transition: all 0.3s ease;
+}
+.topbar .logo-square:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
+}
+
+/* 按钮 */
+.btn { @apply inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium transition; }
+.btn-ghost   { @apply bg-white text-brand-700 border border-blue-200 hover:bg-brand-50; }
+.btn-primary { @apply bg-brand-600 text-white hover:bg-brand-700; }
+.btn-lg      { @apply px-6 py-2.5 text-base font-semibold; }
+
+/* 🚀 现代科技感按钮 */
+.btn-modern {
+  @apply inline-flex items-center justify-center rounded-xl px-6 py-2.5 text-sm font-semibold transition-all duration-300;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 毛玻璃按钮 */
+.btn-glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  box-shadow: 0 4px 12px rgba(45, 111, 230, 0.15);
+}
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(45, 111, 230, 0.25);
+  transform: translateY(-1px);
+}
+
+/* 渐变主按钮 */
+.btn-modern.btn-primary {
+  background: linear-gradient(135deg, #3a8bff 0%, #2d6fe6 100%);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 4px 12px rgba(45, 111, 230, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.btn-modern.btn-primary:hover {
+  background: linear-gradient(135deg, #5ea9ff 0%, #3a8bff 100%);
+  box-shadow: 
+    0 6px 20px rgba(45, 111, 230, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* 按钮光效动画 */
+.btn-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+.btn-modern:hover::before {
+  left: 100%;
+}
+
+/* 🚀 现代科技感 Hero 背景 */
+.hero-modern {
+  position: relative;
+  overflow: hidden;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(58, 139, 255, 0.15), transparent),
+    linear-gradient(180deg, #f6faff 0%, #eff6ff 55%, #eef7ff 100%);
+}
+.hero-modern::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(900px 420px at 50% 18%, rgba(255,255,255,0.85) 0 36%, rgba(255,255,255,0.45) 37% 60%, transparent 61%),
+    radial-gradient(1100px 520px at 15% -8%, rgba(58, 139, 255, 0.08) 0 40%, transparent 55%),
+    radial-gradient(1100px 520px at 85% -10%, rgba(30, 87, 185, 0.08) 0 40%, transparent 55%);
+  filter: blur(8px);
+  pointer-events: none;
+  animation: hero-glow 8s ease-in-out infinite;
+}
+.hero-modern::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(58, 139, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(30, 87, 185, 0.03) 0%, transparent 50%);
+  animation: hero-pulse 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes hero-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+@keyframes hero-pulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+.hero-inner { position: relative; z-index: 1; }
+
+/* 🚀 现代科技感标题 */
+.hero-title {
+  background: linear-gradient(135deg, #3a8bff 0%, #2d6fe6 50%, #1e57b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.05;
+  font-size: clamp(44px, 7.2vw, 96px);
+  filter: drop-shadow(0 2px 4px rgba(45, 111, 230, 0.1));
+  animation: title-shimmer 3s ease-in-out infinite;
+}
+@keyframes title-shimmer {
+  0%, 100% { filter: drop-shadow(0 2px 4px rgba(45, 111, 230, 0.1)); }
+  50% { filter: drop-shadow(0 4px 8px rgba(45, 111, 230, 0.2)); }
+}
+
+/* 三张 iPhone 布局（放大 + 加大间距） */
+.phones-row{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 64px;                 /* ← 间距从 40px 提升到 64px */
+  place-items: center;
+}
+@media (max-width: 1100px){
+  .phones-row{
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding: 0 6% 0.75rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: 6%;
+  }
+  .phones-row::-webkit-scrollbar { height: 0; }
+  .phones-row { scrollbar-width: none; }
+}
+
+/* 🚀 现代科技感手机卡片 */
+.phone{
+  width: 420px;
+  height: 760px;
+  border-radius: 36px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 20px 60px rgba(45, 111, 230, 0.15),
+    0 0 1px rgba(255, 255, 255, 0.8) inset;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.phone::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 36px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(58, 139, 255, 0.3), rgba(30, 87, 185, 0.1));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.phone:hover {
+  transform: translateY(-8px);
+  box-shadow: 
+    0 30px 80px rgba(45, 111, 230, 0.25),
+    0 0 1px rgba(255, 255, 255, 0.9) inset;
+}
+@media (max-width: 1100px){
+  .phone{
+    width: 92vw;
+    max-width: 380px;
+    height: 660px;
+    flex: 0 0 auto;
+  }
+}
+
+/* 🚀 现代科技感内屏 */
+.phone-screen{
+  flex: 1;
+  border-radius: 24px;
+  border: 1px solid rgba(231, 240, 255, 0.8);
+  background: 
+    linear-gradient(135deg, rgba(247, 251, 255, 0.95) 0%, rgba(238, 246, 255, 0.95) 100%);
+  backdrop-filter: blur(10px);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 
+    0 4px 12px rgba(45, 111, 230, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.phone-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(58, 139, 255, 0.3), transparent);
+  border-radius: 24px 24px 0 0;
+}
+
+/* 小灰条——固定底部 */
+.phone-notch{
+  width: 128px; height: 10px; border-radius: 9999px;
+  background: #cfd8e6;
+  margin-top: auto;
+  margin-bottom: 8px;
+  margin-left: auto; margin-right: auto;
+}
+
+/* 手机端“滑动提示” */
+.swipe-hint{ display:none; }
+@media (max-width: 1100px){
+  .swipe-hint{
+    display:flex; align-items:center; justify-content:center;
+    gap:.5rem; margin-top:.5rem;
+    color: var(--color-brand-700);
+    font-size:.82rem; opacity:.85;
+  }
+  .swipe-hint .arrow{ animation: hint-move 1.5s ease-in-out infinite; }
+  .swipe-hint .arrow.right{ animation-delay: .75s; }
+  @keyframes hint-move {
+    0%,100% { transform: translateX(0);  opacity:.45; }
+    50%     { transform: translateX(.25rem); opacity:1; }
+  }
+}
+
+/* 🚀 霓虹动画效果（仅用于 /browse 页面） */
+@keyframes neon-border {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes neon-border-phone {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes scan-line {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { opacity: 0; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(1.1); }
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes grid-move {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.1); }
+}
