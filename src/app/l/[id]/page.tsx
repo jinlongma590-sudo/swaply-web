@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { OpenInAppButton } from "@/components/OpenInAppButton";
+import { OpenInAppButton } from "@/components/OpenInAppButton"; // 确保路径正确，如果不报错就不用动
 
 /** ===== Types ===== */
 type ListingRow = {
@@ -104,11 +104,10 @@ function timeAgo(iso?: string | null): string | null {
 }
 
 /** ===== Metadata (OG/Twitter) ===== */
-// 🔥 修复：params 现在是 Promise，需要 await
 export async function generateMetadata(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
-  const { id } = await params; // ✅ 先 await params
+  const { id } = await params;
   const item = await getListing(id);
   if (!item) return { title: "Listing not found" };
 
@@ -134,13 +133,12 @@ export async function generateMetadata(
 }
 
 /** ===== Page (Server Component) ===== */
-// 🔥 修复：params 现在是 Promise，需要 await
 export default async function ListingPage({
   params
 }: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = await params; // ✅ 先 await params
+  const { id } = await params;
   const item = await getListing(id);
   if (!item) return notFound();
   const [similar] = await Promise.all([getSimilarListings(item.id, item.city)]);
@@ -151,18 +149,25 @@ export default async function ListingPage({
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(60%_50%_at_50%_-10%,#bfe2ff_0%,transparent_60%),linear-gradient(180deg,#eef6ff_0%,#f8fbff_100%)]">
+      {/* 背景装饰 */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-[-120px] h-[280px] w-[580px] -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-400/30 via-cyan-300/30 to-indigo-400/30 blur-3xl" />
         <div className="absolute right-[-120px] bottom-[-120px] h-[260px] w-[260px] rounded-full bg-gradient-to-tr from-blue-500/20 to-cyan-400/10 blur-2xl" />
       </div>
 
       <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-6 md:py-10">
+        {/* 顶部主要信息卡片 */}
         <section className="rounded-2xl border border-white/40 bg-white/55 p-5 shadow-[0_10px_30px_rgba(30,64,175,0.08)] backdrop-blur-xl md:p-7">
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="min-w-0">
-              <h1 className="truncate text-2xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-sky-600 to-indigo-700 md:text-3xl">
+              {/* 🔥🔥🔥 关键修复 🔥🔥🔥
+                 旧代码：text-transparent bg-clip-text ... (安卓11上会导致文字隐形)
+                 新代码：text-blue-900 (稳稳的深蓝色)
+              */}
+              <h1 className="truncate text-2xl font-extrabold tracking-tight text-blue-900 md:text-3xl">
                 {item.title ?? "Listing"}
               </h1>
+
               <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-neutral-600">
                 {item.city && (
                   <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-blue-50/60 px-3 py-1 text-blue-700">
@@ -184,6 +189,7 @@ export default async function ListingPage({
 
             <div className="flex shrink-0 items-center gap-3">
               <div className="relative">
+                {/* 这里的动画装饰没问题，可以保留 */}
                 <div aria-hidden className="absolute inset-0 rounded-xl p-[2px]">
                   <div
                     className="absolute inset-0 rounded-xl blur-md animate-spin [animation-duration:6s]"
@@ -201,6 +207,7 @@ export default async function ListingPage({
           </div>
         </section>
 
+        {/* 图片区域 - 这里的代码你之前已经写得很好了，没问题 */}
         <section className="mt-5 md:mt-7">
           <div className="rounded-3xl border border-blue-200/60 bg-white/70 p-2 shadow-[0_12px_30px_rgba(30,64,175,0.08)] backdrop-blur-xl">
             <div className="relative overflow-hidden rounded-2xl bg-neutral-100 shadow-[0_20px_60px_rgba(30,64,175,0.18)]">
@@ -238,6 +245,7 @@ export default async function ListingPage({
           </div>
         </section>
 
+        {/* 描述区域 */}
         {item.description && (
           <section className="mt-5 md:mt-7">
             <div className="rounded-2xl border border-white/40 bg-white/70 p-5 shadow-[0_10px_30px_rgba(30,64,175,0.06)] backdrop-blur-xl">
@@ -249,6 +257,7 @@ export default async function ListingPage({
           </section>
         )}
 
+        {/* 相似商品推荐 - 这里有 Image fill，但我检查了你的代码，已经加了 relative，完美！ */}
         {similar && similar.length > 0 && (
           <section className="mt-6 md:mt-10">
             <h3 className="mb-3 text-lg font-extrabold tracking-tight text-blue-900">

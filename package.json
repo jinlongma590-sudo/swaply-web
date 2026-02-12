@@ -27,7 +27,15 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.5",
     "postcss": "^8.5.6",
+    "postcss-nesting": "^14.0.0",
+    "postcss-preset-env": "^11.1.3",
     "tailwindcss": "^4.1.14",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "defaults",
+    "Android >= 10",
+    "iOS >= 12",
+    "chrome >= 80"
+  ]
 }
