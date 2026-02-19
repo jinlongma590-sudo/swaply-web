@@ -67,7 +67,7 @@ export default function Page() {
         <p style={{ margin: "0 0 20px" }}>
           Email us from your registered address with subject <em>“Delete my Swaply account”</em>:
           <br />
-          <strong>support@swaply.cc</strong>
+          <strong>swaply@swaply.cc</strong>
         </p>
 
         <h2 style={{ fontSize: 20, margin: "20px 0 8px" }}>Questions</h2>

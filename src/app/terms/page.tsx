@@ -100,7 +100,7 @@ export default function TermsPage() {
       <h2>13. Contact Information</h2>
       <p>
         For questions about these Terms, contact:{" "}
-        <a href="mailto:support@swaply.cc">support@swaply.cc</a>
+        <a href="mailto:swaply@swaply.cc">swaply@swaply.cc</a>
       </p>
     </main>
   );

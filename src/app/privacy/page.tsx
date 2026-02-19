@@ -114,7 +114,7 @@ export default function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        Email: <a href="mailto:support@swaply.cc">support@swaply.cc</a>
+        Email: <a href="mailto:swaply@swaply.cc">swaply@swaply.cc</a>
       </p>
 
       <p className="text-sm text-zinc-500">Effective date: {today}</p>
